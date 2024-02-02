@@ -14,6 +14,6 @@ public class CorsMvcConfig implements WebMvcConfigurer {
         corsRegistry.addMapping("/**")
 
                 // 오리진(도메인)에서 온 요청을 허용
-                .allowedOrigins("http://frontend-domain.com");
+                .allowedOriginPatterns("*"); 
     }
 }
