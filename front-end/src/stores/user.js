@@ -7,7 +7,7 @@ import { userLogin, userSignup } from '@/api/user.js'
 // login, signup, user info, 토큰 관리
 export const useUserStore = defineStore('user', () => {
   const router = useRouter()
-  const isLogin = ref(true)
+  const isLogin = ref(false)
   const userInfo = ref(null)
 
   // 회원 가입 함수
