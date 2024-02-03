@@ -1,12 +1,6 @@
-FROM node:lts-alpine as build-stage
-WORKDIR /homepage
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
+FROM eclipse-temurin:17-jdk-alpine
+VOLUME /tmp
+ARG JAR_FILE=build/libs/*.jar
+COPY ${JAR_FILE} app.jar
 
-FROM nginx:stable-alpine as production-stage
-
-COPY --from=build-stage ./homepage/dist /usr/share/nginx/html/
-
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["java","-jar","/app.jar"]
