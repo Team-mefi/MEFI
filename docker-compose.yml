@@ -17,7 +17,7 @@ services:                           # 서비스 목록
       - mefi_network
 
   mefi-backend:
-    container_name: ii-backend
+    container_name: mefi-backend
     build:                          
       context: ./backend          
       dockerfile: Dockerfile
