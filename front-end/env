@@ -1,0 +1,1 @@
+VUE_APP_API_URL = "http://mefi-backend:8080"
