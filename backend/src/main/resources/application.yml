@@ -1,0 +1,66 @@
+spring:
+  # database
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(HnRs9Ivms5soqKFzIKEquPvllun7PEIfmFM43Vn9dbSD7GyDGGgu34nyQKrC0k/6MwWXnJg8ImpKlcPos6OkiHppuPdZeYrti2rhDM1RhyjQe+vkN4MBjokjJcvKzREPyaSIcyE0jDlYYsLLyQu2vg==)
+    username: ENC(STFAJLTBNjto5twxRhLYvg==)
+    password: ENC(WxXgJEw2DSZp2O2LvV3g0jsWmvKqhev9)
+  # jpa
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true;
+  # encoding
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+  # secret key
+  jwt:
+    secret: ENC(PAhihR/o/LMG5jb0+zepLwkJwRsbLWEtrMvly4hkcPa/SPLUDBeIHp2a9ZjOlRm74akyR74ZlOLwzosYsYEt9w==)
+    filter: ENC(CAEg9MCNghGS+/LMWdeFZeMvjCMo0n8c)
+  # mail smtp
+  mail:
+    # 서버 주소
+    host: ENC(mupn/aG1QTqut/pKRGlRdKiFQuJbh9Tn)
+    # 메일 인증 서버 포트 (587, 465 존재, SSL은 465)
+    port: 465
+    # 아이디
+    username: ENC(pTGzOwQWXpdqNkSLdhp8RT95SFo9ZpCF09C3AzhKVlCP2CSKgPywSQ==)
+    # 비밀번호
+    password: ENC(Itionk0I8JVYo7Fcy4hItUKfPYHXmWRb)
+    properties:
+      # 메일 디버그 모드 설정 (전송 과정 로그 출력)
+      debug: true
+      mail:
+        smtp:
+          # SMTP 인증 활성화 (활성시 로그인 때 계정 정보 필요)
+          auth: true
+          ssl:
+            # SSL 보안 설정 (전송 과정 데이터 암호화 제공)
+            enable: true
+            # 신뢰할 수 있는 SMTP 서버 호스트 지정
+            trust: ENC(bGAAKA52ojbicLqm/h74IoFxDVO55h6Z)
+          # STARTTLS 연결을 활성화 (평문 통신 채널에서 암호화 통신 채널로 업그레이드)
+          starttls.enable: true
+# AWS S3
+cloud:
+  aws:
+    s3:
+      bucket: ENC(Hi5do06VG0lVlNJCfEKOjgku7M81xUJi)
+      credentials:
+        access-key: ENC(OzJEObME0H66eqHzFatuSpSTGlg+TMClMEs45aSjBOQ=)
+        secret-key: ENC(3Z8znblOJXvQHMUdMO37Ebw7eA3iH29koHw0SkSiwtxReXXyPlzHtO/2yRVw0hG0rL31L8Xwhiw=)
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false # EC2의 Spring Cloud 자동 구성 해제
+# OPENVIDU
+OPENVIDU_URL: ENC(cAdKcPlcuC90ofK+D2NywDLSRWYAzxg+U0WcVETNksE=)
+OPENVIDU_SECRET: ENC(uysFfMAdi7gMwmSUIGJWvXEnWq+2w5BWpy+QQl87C7g=)
+logging.level:
+  org.hibernate.SQL: debug  # logger로 Hibernate 실행 SQL을 남긴다.
