@@ -1,16 +1,13 @@
 package com.mefi.backend.api.controller;
 
 import com.mefi.backend.api.response.NotiResponseDto;
-import com.mefi.backend.api.response.SseReponseDto;
 import com.mefi.backend.api.service.NotiService;
 import com.mefi.backend.common.auth.CustomUserDetails;
 import com.mefi.backend.common.model.BaseResponseBody;
-import com.mefi.backend.db.entity.Noti;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
