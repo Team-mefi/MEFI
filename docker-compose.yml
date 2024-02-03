@@ -1,45 +1,33 @@
 version: '3.8'                      # docker-compose 버전
 services:                           # 서비스 목록
-  frontend:                         # 서비스 이름
+  mefi-frontend:                         # 서비스 이름
+    container_name: mefi-frontend        # 컨테이너
     build:                          # 이미지 Build 옵션
       context: ./front-end          # Build될 프로젝트가 위치한 경로 
       dockerfile: Dockerfile        # 프로젝트 폴더의 dockerfile 이름
-
-    container_name: frontend        # 컨테이너
-
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
     ports:                          # host와 공유할 포트 목록
-      - "3000:3000"                     # host:container
+      - "80:80"                     # host:container
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/lib/letsencrypt:/var/lib/letsencrypt
+      - /home/ubuntu/nginx/sites:/etc/nginx/conf.d
+      - /home/ubuntu/nginx/sites/sites-enabled:/etc/nginx/sites-enabled
+    networks:
+      - mefi_network
 
-#    environment:
-#      VUE_APP_API_URL: http://backend:8080  # 백엔드 URL 설정
-
-    depends_on:                     # 아래의 서비스들이 모두 시작된 이후에 이 서비스를 시작
-      - backend                     # backend 서비스가 시작될 때까지 기다림
-
-    # networks:
-    #   - mefi_network
-
-  backend:      
+  mefi-backend:
+    container_name: ii-backend
     build:                          
       context: ./backend          
-      dockerfile: Dockerfile        
-
-    container_name: backend
-
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
+      dockerfile: Dockerfile
     ports:                          
       - "8080:8080"
     environment:                    # 환경변수 설정
       JASYPT_KEY: abc
-      
-    # networks:
-    #   - mefi_network
+    networks:
+      - mefi_network
 
-# networks:
-#   mefi_network:
-#     driver: bridge
+networks:
+  mefi_network:
+    driver: bridge
