@@ -97,7 +97,7 @@ public class SecurityConfig {
                         CorsConfiguration configuration = new CorsConfiguration();
 
                         // 클라이언트에서 온 요청 중에서 허용할 도메인 설정
-                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
+                        configuration.setAllowedOrigins(Collections.singletonList("*"));
 
                         // 모든 HTTP 메서드 허용 설정
                         configuration.setAllowedMethods(Collections.singletonList("*"));
