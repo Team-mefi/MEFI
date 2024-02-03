@@ -3,11 +3,11 @@ const local = localAxios();
 
 async function teamSelect(param, success, fail){
     local.defaults.headers["Authorization"] = 'Bearer ' + localStorage.getItem("accessToken");
-    await local.get(`/team`, param).then(success).catch(fail);
+    await local.get(`api/team`, param).then(success).catch(fail);
 }
 async function teamCreate(param, success, fail){
     local.defaults.headers["Authorization"] = 'Bearer ' + localStorage.getItem("accessToken");
-    await local.post(`/team`, param).then(success).catch(fail);
+    await local.post(`api/team`, param).then(success).catch(fail);
 }
 
 export { teamSelect, teamCreate };
