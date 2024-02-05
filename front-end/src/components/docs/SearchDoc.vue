@@ -131,12 +131,13 @@ const saveFile = (fileName) => {
   )
 }
 
+// 기존에 저장된 파일 제거
 const eraseFile = (fileName) => {
   deleteFile(
     {
       fileName: fileName
     },
-    546,
+    conferenceId,
     (response) => {
       alert('삭제되었답니다~')
       fetchFiles()
@@ -147,12 +148,18 @@ const eraseFile = (fileName) => {
   )
 }
 
+// 추가한 파일 목록 중 파일명 기준으로 제거 (한 번에 삭제도 가능함) 
 const removeFile = (fileName) => {
   addedFileList.value = addedFileList.value.filter((addedFile) => addedFile.name !== fileName)
 }
 
 onMounted(() => {
-  fetchFiles()
+  // 회의 관련 파일 목록이 있다면 불러오기
+  try {
+    fetchFiles()
+  } catch (e) {
+    console.log("파일 목록이 없거나 회의 생성 중 입니다.")
+  }
 })
 
 // 드래그 앤 드롭을 사용하지 않고 수동으로 파일을 넣는 함수
@@ -162,6 +169,7 @@ onMounted(() => {
 //   addedFileList.value.push(files)
 // }
 
+// 마우스 이벤트 설정
 const onDragenter = (event) => {
   isDragged.value = true
 }
@@ -170,8 +178,10 @@ const onDragleave = (event) => {
   isDragged.value = false
 }
 
+// 마우스로 파일을 drop하면 파일 추가 항목에 파일 추가
 const onDrop = (event) => {
   isDragged.value = false
+
   const files = event.dataTransfer.files[0]
   addedFileList.value.push(files)
 }
