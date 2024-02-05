@@ -50,6 +50,8 @@ const route = useRoute()
 const teamId = ref(route.params?.teamId)
 const conferenceId = ref(route.params?.conferenceId)
 
+const isSummit = ref(false)
+
 // API 호출 함수
 const file = ref(null)
 const fileList = ref([])
@@ -57,6 +59,7 @@ const addedFileList = ref([])
 
 const isDragged = ref(false)
 
+// 회의 관련 파일 목록 불러오기
 const fetchFiles = () => {
   getFiles(
     {},
@@ -70,6 +73,7 @@ const fetchFiles = () => {
   )
 }
 
+// 스토리지에 단일 문서 및 첨부파일 저장
 const uploadFile = () => {
   const formData = new FormData()
 
@@ -79,7 +83,7 @@ const uploadFile = () => {
         teamId: teamId.value,
         conferenceId: conferenceId.value,
         fileName: 'test.png',
-        type: 'DOCUMENT'
+        type: 'ATTACHMENT'
       })
     ],
     { type: 'application/json' }
@@ -90,16 +94,17 @@ const uploadFile = () => {
 
   createFile(
     formData,
-    (response) => {
-      fetchFiles()
+    () => {
       addedFileList.value = []
+      fetchFiles()
     },
     (error) => {
-      console.log(error)
+      console.error("파일 저장 실패")
     }
   )
 }
 
+// 로컬에 파일 저장하는 메서드
 const saveFile = (fileName) => {
   const originFileName = fileName
 
@@ -126,7 +131,7 @@ const saveFile = (fileName) => {
       // URL.revokeObjectUrl(filepath)
     },
     (error) => {
-      console.log(error)
+      console.error("파일 다운로드 실패")
     }
   )
 }
@@ -137,13 +142,13 @@ const eraseFile = (fileName) => {
     {
       fileName: fileName
     },
-    conferenceId,
+    conferenceId.value,
     (response) => {
-      alert('삭제되었답니다~')
+      alert(`${fileName} 파일이 삭제되었습니다.`)
       fetchFiles()
     },
     (error) => {
-      console.log(error)
+      console.error("파일 제거 실패")
     }
   )
 }
