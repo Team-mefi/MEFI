@@ -33,7 +33,7 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     @Transactional
-    public void createTeam(Long leaderId, TeamReqDto teamReqDto) throws Exception {
+    public void createTeam(Long leaderId, TeamReqDto teamReqDto){
         // 팀 생성
         Team team = Team.builder()
                 .name(teamReqDto.getTeamName())
@@ -161,7 +161,9 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
-    public TeamDetailDto getTeamDetail(Long teamId) {
+    public TeamDetailDto getTeamDetail(Long userId, Long teamId) {
+        // 해당 팀의 멤버가 아니라면 에러
+
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new Exceptions(ErrorCode.TEAM_NOT_EXIST));
 
         return new TeamDetailDto(team.getId(), team.getName(), team.getDescription(), team.getCreatedTime());

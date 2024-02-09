@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface TeamService {
 
-    void createTeam(Long learderId, TeamReqDto teamReqDto) throws Exception;
+    void createTeam(Long learderId, TeamReqDto teamReqDto);
 
     // 팀 목록 조회
     List<TeamResDto> getTeamList(Long userId);
@@ -31,7 +31,7 @@ public interface TeamService {
     void deleteMember(Long userId, Long teamId, Long memberId);
 
     // 팀 상세 정보 조회
-    TeamDetailDto getTeamDetail(Long teamId);
+    TeamDetailDto getTeamDetail(Long userId, Long teamId);
 
     // 팀 정보 수정
     void modifyTeam(Long userId, Long teamId, TeamModifyReqDto teamModifyReqDto);
