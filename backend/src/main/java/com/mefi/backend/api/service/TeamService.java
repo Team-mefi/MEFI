@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface TeamService {
 
+    // 팀 생성
     void createTeam(Long learderId, TeamReqDto teamReqDto);
 
     // 팀 목록 조회
@@ -36,6 +37,6 @@ public interface TeamService {
     // 팀 정보 수정
     void modifyTeam(Long userId, Long teamId, TeamModifyReqDto teamModifyReqDto);
 
-    // 팀원 권한 변경
+    // 리더 권한 변경
     void modifyUserRole(Long userId, Long teamId, Long memberId);
 }
