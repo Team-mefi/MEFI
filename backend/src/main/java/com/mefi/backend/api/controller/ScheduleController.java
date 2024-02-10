@@ -58,44 +58,51 @@ public class ScheduleController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseResponseBody.of(0, "SUCCESS"));
     }
 
-    @GetMapping("")
-    @Operation(summary = "개인 일정 조회", description = "사용자의 모든 개인 일정 정보를 조회한다.")
+    @GetMapping
+    @Operation(summary = "기간 내 개인 일정 조회", description = "사용자의 모든 개인 일정 정보를 조회한다.")
     @ApiResponse(responseCode = "200", description = "성공 시 상태 코드 200와 개인 일정 리스트 반환")
     public ResponseEntity<? extends BaseResponseBody> getPrivateSchedule(Authentication authentication,
                                                                          @RequestParam(name = "start") String start,
                                                                          @RequestParam(name = "end") String end){
 
-        // 로그인 된 유저 정보 조회
+        log.info("=======================ScheduleController-getPrivateSchedule()=======================");
+
+        // 현재 사용자의 세부 정보를 인증 객체에서 추출하여 저장
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
 
-
-        log.info("================getPrivateSchedule=============");
+        // 사용자 식별자와 조회 일자 로깅
         log.info("userID : {} ", user.getUserId());
         log.info("start : {} ", start);
         log.info("end : {} ", end);
 
+        // 개인 일정 조회 서비스 호출 및 사용자 식별자, 조회 기간 전달
         List<ScheduleDetailResDto> schedule = scheduleService.getPrivateSchedule(user.getUserId(), start, end);
 
+        // 조회가 성공하면 HTTP 상태 코드 200(OK) 및 개인 일정 정보을 반환
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(0, schedule));
     }
 
     @GetMapping("/{teamId}")
-    @Operation(summary = "팀원 전체 일정 조회", description = "리더가 자신 포함 모든 멤버의 해당 일자 일정 정보를 조회한다.")
+    @Operation(summary = "해당 일자 팀원 전체 일정 조회", description = "리더가 자신 포함 모든 멤버의 해당 일자 일정 정보를 조회한다.")
     @ApiResponse(responseCode = "200", description = "성공 시 상태 코드 200와 모든 멤버의 해당 일자 일정 정보")
     public ResponseEntity<? extends BaseResponseBody> getAllMemberSchedule(Authentication authentication,
                                                                            @PathVariable("teamId") Long teamId,
                                                                            @RequestParam(name = "day") String day){
 
-        // 로그인 된 유저 정보 조회
+        log.info("=======================ScheduleController-getAllMemberSchedule()=======================");
+
+        // 현재 사용자의 세부 정보를 인증 객체에서 추출하여 저장
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
 
-        log.info("================getPrivateSchedule=============");
+        // 사용자, 팀 식별자와 조회 일자 로깅
         log.info("userId : {} ", user.getUserId());
         log.info("teamId : {} ", teamId);
         log.info("start : {} ", day);
 
+        // 팀원 전체 일정 조회 서비스 호출 및 사용자, 팀 식별자와 조회 일자 전달
         List<ScheduleTimeDto> result = scheduleService.getAllMemberSchedule(user.getUserId(), teamId, day);
 
+        // 조회가 성공하면 HTTP 상태 코드 200(OK) 및 팀원 전체 일정 정보을 반환
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(0, result));
     }
 
@@ -105,15 +112,20 @@ public class ScheduleController {
     public ResponseEntity<? extends BaseResponseBody> modifySchedule(Authentication authentication,
                                                                      @RequestBody ScheduleReqDto scheduleReqDto,
                                                                      @PathVariable(name = "scheduleId") Long scheduleId){
-        // 로그인 된 유저 정보 조회
+
+        log.info("=======================ScheduleController-modifySchedule()=======================");
+
+        // 현재 사용자의 세부 정보를 인증 객체에서 추출하여 저장
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+
+        // 사용자, 수정 일정 식별자 로깅
         log.info("User ID : {}", user.getUserId());
         log.info("Schedule ID : {}", scheduleId);
 
-        // 일정 등록
+        // 개인 일정 수정 서비스 호출 및 사용자, 사용자, 수정 일정 식별자와 수정 데이터 전달
         scheduleService.modifySchedule(user.getUserId(), scheduleReqDto, scheduleId);
 
-        // 반환
+        // 수정이 성공하면 HTTP 상태 코드 200(OK) 및 성공 메시지를 반환
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponseBody.of(0, "SUCCESS"));
     }
 }

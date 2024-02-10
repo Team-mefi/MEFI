@@ -47,6 +47,7 @@ public class PrivateSchedule {
         this.user = user;
     }
 
+    // 개인 일정 정보 수정 메서드
     public void changeDetail(String summary, String description, LocalDateTime startedTime, LocalDateTime endTime) {
         this.startedTime = startedTime;
         this.endTime = endTime;

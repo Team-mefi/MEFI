@@ -15,8 +15,10 @@ public interface ScheduleRepository extends JpaRepository<PrivateSchedule, Long>
 
     Optional<PrivateSchedule> findById(Long scheduleId);
 
+    // 기간 내 개인 일정 조회
     List<PrivateSchedule> findByUserAndStartedTimeBetweenOrderByStartedTime(User user, LocalDateTime start, LocalDateTime end);
 
+    // 해당 일자 팀원 전체 일정 조회
     @Query("SELECT new com.mefi.backend.api.response.ScheduleTimeDto(s.startedTime, s.endTime) " +
             "FROM PrivateSchedule s " +
             "WHERE s.user.id IN :userIds " +
