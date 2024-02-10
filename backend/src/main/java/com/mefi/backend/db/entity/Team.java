@@ -26,7 +26,6 @@ public class Team {
     private String description;
 
     // 생성시간
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdTime;
 
     /*
@@ -45,9 +44,10 @@ public class Team {
 
     // 새로운 팀 객체를 생성하는 빌더
     @Builder
-    public Team(String name, String description){
+    public Team(String name, String description, LocalDateTime createdTime){
         this.name = name;
         this.description = description;
+        this.createdTime = createdTime;
     }
 
     // 팀 멤버 추가 메서드

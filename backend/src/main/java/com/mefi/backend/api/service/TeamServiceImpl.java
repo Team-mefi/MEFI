@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -41,6 +42,7 @@ public class TeamServiceImpl implements TeamService{
         Team team = Team.builder()
                 .name(teamReqDto.getTeamName())
                 .description(teamReqDto.getTeamDescription())
+                .createdTime(LocalDateTime.now())
                 .build();
 
         // 리더 추가
