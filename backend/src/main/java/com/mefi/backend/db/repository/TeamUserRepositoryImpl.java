@@ -8,7 +8,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.mefi.backend.db.entity.QTeam.team;
 import static com.mefi.backend.db.entity.QUser.user;
@@ -24,6 +23,7 @@ public class TeamUserRepositoryImpl implements TeamUserRepositoryCustom{
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    // 유저 식별 ID로 사용자가 속한 팀 목록 조회
     @Override
     public List<TeamResDto> findTeamsByUserId(Long userId) {
         // Querydsl 반환
@@ -35,19 +35,7 @@ public class TeamUserRepositoryImpl implements TeamUserRepositoryCustom{
                 .fetch();
     }
 
-    // 사용자가 해당 팀의 구성원인지 확인하는 메서드
-    @Override
-    public Long isMember(Long userId, Long teamId){
-        // Querydsl 반환
-        return Optional.ofNullable(queryFactory
-                .select(userTeam.count())
-                .from(userTeam)
-                .where(userTeam.user.id.eq(userId)
-                        .and(userTeam.team.id.eq(teamId)))
-                .fetchOne()).orElse(0L);
-    }
-
-    // 해당 팀원 정보 조회하는 메서드
+    // 해당 팀원 목록 조회
     @Override
     public List<MemberResDto> getMemberList(Long teamId){
         // Querydsl 반환

@@ -9,22 +9,19 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-// 스프링 데이터 리포지토리에 사용자 정의 인터페이스 상속
+// Spring Data JPA 기반 TeamUserRepository 공통 인터페이스 + 사용자 정의 인터페이스 상속
 public interface TeamUserRepository extends JpaRepository<UserTeam, Long>, TeamUserRepositoryCustom {
 
+    // 팀원 조회
     @Query("SELECT ut FROM UserTeam ut WHERE ut.user.id = :userId AND ut.team.id = :teamId")
-    Optional<UserTeam> findByUserIdAndTeamId(@Param("userId") Long userId,@Param("teamId") Long teamId);
+    Optional<UserTeam> findMember(@Param("userId") Long userId,@Param("teamId") Long teamId);
 
-    @Modifying
-    @Query("DELETE FROM UserTeam ut WHERE ut.team.id = :teamId")
-    void deleteByTeamId(Long teamId);
-
-    // 팀멤버 삭제
+    // 팀원 삭제
     @Modifying
     @Query("DELETE FROM UserTeam ut WHERE ut.user.id = :userId AND ut.team.id = :teamId")
-    void deleteByUserIdAndTeamId(Long userId, Long teamId);
+    void deleteMember(Long userId, Long teamId);
 
-    // 멤버 PK 조회
+    // 팀원 PK 조회
     @Query("SELECT ut.user.id FROM UserTeam ut WHERE  ut.team.id = :teamId")
-    List<Long> findByUserId(@Param("teamId") Long teamId);
+    List<Long> findByTeamId(@Param("teamId") Long teamId);
 }

@@ -83,7 +83,7 @@ public class TeamServiceImpl implements TeamService{
         log.info("=======================TeamService-getMemberList()=======================");
 
         // 해당 팀의 팀원가 아니라면 예외 처리
-        teamUserRepository.findByUserIdAndTeamId(userId, teamId).orElseThrow(() -> new Exceptions(ErrorCode.TEAM_ACCESS_DENIED));
+        teamUserRepository.findMember(userId, teamId).orElseThrow(() -> new Exceptions(ErrorCode.TEAM_ACCESS_DENIED));
 
         // 팀 구성원 목록 반환
         return teamUserRepository.getMemberList(teamId);
@@ -95,7 +95,7 @@ public class TeamServiceImpl implements TeamService{
         log.info("=======================TeamService-checkRole()=======================");
 
         // 해당 팀의 팀원가 아니라면 예외 처리
-        UserTeam userTeam  = teamUserRepository.findByUserIdAndTeamId(userId, teamId).orElseThrow(() -> new Exceptions(ErrorCode.TEAM_ACCESS_DENIED));
+        UserTeam userTeam  = teamUserRepository.findMember(userId, teamId).orElseThrow(() -> new Exceptions(ErrorCode.TEAM_ACCESS_DENIED));
 
         // 해당 유저의 권한 로깅
         log.info("해당 유저의 권한 : {}", userTeam.getRole());
@@ -143,10 +143,7 @@ public class TeamServiceImpl implements TeamService{
         // 팀장 권환 확인
         checkRole(userId, teamId);
 
-        // 팀원 전원 삭제
-        teamUserRepository.deleteByTeamId(teamId);
-
-        // 팀 삭제
+        // 팀 삭제 (CascadeType.ALL 옵션으로 멤버들도 함께 삭제)
         teamRepository.delete(team);
     }
 
@@ -160,14 +157,14 @@ public class TeamServiceImpl implements TeamService{
         checkRole(userId, teamId);
 
         // 만약 리더를 삭제하려 한다면 예외 발생
-        UserTeam userTeam  = teamUserRepository.findByUserIdAndTeamId(memberId, teamId).orElseThrow(() -> new Exceptions(ErrorCode.MEMBER_NOT_EXIST));
+        UserTeam userTeam  = teamUserRepository.findMember(memberId, teamId).orElseThrow(() -> new Exceptions(ErrorCode.MEMBER_NOT_EXIST));
         if(userTeam.getRole() == UserRole.LEADER){throw new Exceptions(ErrorCode.LEADER_NOT_DELETEABLE);}
 
         // 삭제하려는 팀원이 해당 팀에 없다면 예외 발생
-        teamUserRepository.findByUserIdAndTeamId(memberId, teamId).orElseThrow(() -> new Exceptions(ErrorCode.TEAM_ACCESS_DENIED));
+        teamUserRepository.findMember(memberId, teamId).orElseThrow(() -> new Exceptions(ErrorCode.TEAM_ACCESS_DENIED));
 
         // 팀원 삭제
-        teamUserRepository.deleteByUserIdAndTeamId(memberId, teamId);
+        teamUserRepository.deleteMember(memberId, teamId);
     }
 
     // 팀 상세 정보 조회
@@ -176,7 +173,7 @@ public class TeamServiceImpl implements TeamService{
         log.info("=======================TeamService-getTeamDetail()=======================");
 
         // 해당 팀의 팀원이 아니라면 예외 처리
-        teamUserRepository.findByUserIdAndTeamId(userId, teamId).orElseThrow(() -> new Exceptions(ErrorCode.TEAM_ACCESS_DENIED));
+        teamUserRepository.findMember(userId, teamId).orElseThrow(() -> new Exceptions(ErrorCode.TEAM_ACCESS_DENIED));
 
         // 해당 팀이 존재하지 않는다면 예외 처리
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new Exceptions(ErrorCode.TEAM_NOT_EXIST));
@@ -197,9 +194,8 @@ public class TeamServiceImpl implements TeamService{
         // 팀장 권환 확인
         checkRole(userId, teamId);
 
-        // 팀명, 팀설명 수정
-        team.changeTeamName(teamModifyReqDto.getName());
-        team.changeTeamDescription(teamModifyReqDto.getDescription());
+        // 팀 정보 수정
+        team.modifyInfo(teamModifyReqDto.getName(), teamModifyReqDto.getDescription());
     }
 
     // 리더 권한 변경
@@ -212,8 +208,8 @@ public class TeamServiceImpl implements TeamService{
         checkRole(userId, teamId);
 
         // 양도자와 피양도자 해당 팀의 팀원이 아니라면 예외 처리
-        UserTeam leader = teamUserRepository.findByUserIdAndTeamId(userId, teamId).orElseThrow(() -> new Exceptions(ErrorCode.TEAM_ACCESS_DENIED));
-        UserTeam member = teamUserRepository.findByUserIdAndTeamId(memberId,teamId).orElseThrow(() -> new Exceptions(ErrorCode.TEAM_ACCESS_DENIED));;
+        UserTeam leader = teamUserRepository.findMember(userId, teamId).orElseThrow(() -> new Exceptions(ErrorCode.TEAM_ACCESS_DENIED));
+        UserTeam member = teamUserRepository.findMember(memberId,teamId).orElseThrow(() -> new Exceptions(ErrorCode.TEAM_ACCESS_DENIED));;
 
         // 역할 수정
         leader.changeRole(UserRole.MEMBER);
