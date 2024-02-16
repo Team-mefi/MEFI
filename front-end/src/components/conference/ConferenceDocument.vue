@@ -165,16 +165,7 @@ const createPDF = () => {
     // 로컬에 문서 pdf 파일 저장
     // 추후 사용을 위해 주석 처리함
     // doc.save(filename)
-
-    let target = editorContainer.value.firstChild
-    target.removeChild(target.firstChild)
-
-    if (target.firstChild === null) {
-      router.push({ name: 'team', params: { id: teamId.value } })
-      console.log('작성한 문서가 없습니다.')
-      return false
-    }
-
+    
     // 회의 문서 내용 모두 삭제
     deleteContent()
 
@@ -183,7 +174,6 @@ const createPDF = () => {
     // 백엔드와 소통하여 axios 연결할 예정
     const formData = new FormData()
     const file = new File([doc.output('blob')], filename, { type: 'application/pdf' })
-    console.log(file)
 
     const fileRequestDto = new Blob(
       [
